@@ -566,6 +566,40 @@ def get_parser(default_config_files, git_root):
     )
 
     ##########
+    group = parser.add_argument_group("MCP Server Options")
+    group.add_argument(
+        "--mcp-server",
+        action="store_true",
+        help="Start as an MCP server",
+        default=False,
+    )
+    group.add_argument(
+        "--mcp-name",
+        type=str,
+        default="Aider",
+        help="Name of the MCP server (default: Aider)",
+    )
+    group.add_argument(
+        "--mcp-transport",
+        type=str,
+        choices=["stdio", "sse"],
+        default="stdio",
+        help="Transport protocol for MCP server (default: stdio)",
+    )
+    group.add_argument(
+        "--mcp-port",
+        type=int,
+        default=8000,
+        help="Port number for MCP server when using SSE transport (default: 8000)",
+    )
+    group.add_argument(
+        "--mcp-session-timeout",
+        type=int,
+        default=3600,
+        help="Timeout in seconds for inactive sessions (default: 3600)",
+    )
+
+    ##########
     group = parser.add_argument_group("Modes")
     group.add_argument(
         "--message",
