@@ -344,7 +344,19 @@ class RepoMap:
     def get_ranked_tags(
         self, chat_fnames, other_fnames, mentioned_fnames, mentioned_idents, progress=None
     ):
-        import networkx as nx
+        try:
+            import networkx as nx
+        except ImportError:
+            # If networkx is not available, return empty results
+            warnings.warn("networkx not available, skipping tag ranking")
+            return {}, {}
+
+        try:
+            # Test if scipy is available (required by networkx for pagerank)
+            import scipy
+        except ImportError:
+            warnings.warn("scipy not available, skipping tag ranking")
+            return {}, {}
 
         defines = defaultdict(set)
         references = defaultdict(list)

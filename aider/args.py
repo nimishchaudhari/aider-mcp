@@ -645,6 +645,25 @@ def get_parser(default_config_files, git_root):
         help="Print the system prompts and exit (debug)",
         default=False,
     )
+    group.add_argument(
+        "--mcp-server",
+        action="store_true",
+        help="Run as a Model Context Protocol server instead of interactive mode",
+        default=False,
+    )
+    group.add_argument(
+        "--mcp-host",
+        metavar="HOST",
+        default="0.0.0.0",
+        help="Host address for the MCP server (default: 0.0.0.0)",
+    )
+    group.add_argument(
+        "--mcp-port",
+        metavar="PORT",
+        type=int,
+        default=12000,
+        help="Port for the MCP server (default: 12000)",
+    )
 
     ##########
     group = parser.add_argument_group("Voice settings")
