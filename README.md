@@ -100,6 +100,13 @@ Automatically lint and test your code every time aider makes changes. Aider can 
 <a href="https://aider.chat/docs/usage/copypaste.html"><img src="https://aider.chat/assets/icons/content-copy.svg" width="32" height="32" align="left" valign="middle" style="margin-right:10px"></a>
 Work with any LLM via its web chat interface. Aider streamlines copy/pasting code context and edits back and forth with a browser.
 
+<br>
+
+### Model Context Protocol (MCP) Server
+
+<img src="https://aider.chat/assets/icons/server.svg" width="32" height="32" align="left" valign="middle" style="margin-right:10px">
+Run Aider as an MCP server to integrate with MCP hosts like Cline or Claude Desktop. This allows these applications to access your codebase through Aider.
+
 ## Getting Started
 
 ```bash
@@ -117,6 +124,10 @@ aider --model sonnet --api-key anthropic=<key>
 
 # o3-mini
 aider --model o3-mini --api-key openai=<key>
+
+# Run as MCP server (install with MCP dependencies first)
+pip install "aider-chat[mcp]"
+aider --mcp-server --mcp-port 12000
 ```
 
 See the [installation instructions](https://aider.chat/docs/install.html) and [usage documentation](https://aider.chat/docs/usage.html) for more details.

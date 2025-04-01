@@ -651,6 +651,62 @@ def main(argv=None, input=None, output=None, force_git_root=None, return_coder=F
 
     analytics.event("launched")
 
+    if args.mcp_server and not return_coder:
+        # Import the MCP server module
+        try:
+            from aider.mcp_server import run_server
+        except ImportError as e:
+            io.tool_error(f"Failed to import MCP server module: {e}")
+            io.tool_output("Make sure FastAPI and uvicorn are installed:")
+            io.tool_output("pip install fastapi uvicorn")
+            analytics.event("exit", reason="MCP server import error")
+            return 1
+        
+        # Initialize fnames and git_dname for MCP server
+        all_files = args.files + (args.file or [])
+        fnames = [str(Path(fn).resolve()) for fn in all_files]
+        git_dname = None
+        if len(all_files) == 1:
+            if Path(all_files[0]).is_dir():
+                if args.git:
+                    git_dname = str(Path(all_files[0]).resolve())
+                    fnames = []
+        
+        # Create necessary Aider components for the MCP server
+        if args.git:
+            try:
+                # For MCP server, we don't need commit message models
+                repo = GitRepo(
+                    io,
+                    fnames,
+                    git_dname,
+                    args.aiderignore,
+                    models=None,  # No models needed for MCP server
+                    attribute_author=args.attribute_author,
+                    attribute_committer=args.attribute_committer,
+                    attribute_commit_message_author=args.attribute_commit_message_author,
+                    attribute_commit_message_committer=args.attribute_commit_message_committer,
+                    commit_prompt=args.commit_prompt,
+                    subtree_only=args.subtree_only,
+                    git_commit_verify=args.git_commit_verify,
+                )
+            except FileNotFoundError:
+                repo = None
+        else:
+            repo = None
+        
+        # Start the MCP server
+        io.tool_output(f"Starting Aider MCP server on {args.mcp_host}:{args.mcp_port}")
+        analytics.event("mcp_server_session")
+        try:
+            run_server(io, repo, args.mcp_host, args.mcp_port)
+            analytics.event("exit", reason="MCP server ended")
+            return 0
+        except Exception as e:
+            io.tool_error(f"Error running MCP server: {e}")
+            analytics.event("exit", reason="MCP server error")
+            return 1
+            
     if args.gui and not return_coder:
         if not check_streamlit_install(io):
             analytics.event("exit", reason="Streamlit not installed")
