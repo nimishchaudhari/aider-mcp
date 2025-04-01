@@ -128,6 +128,10 @@ aider --model o3-mini --api-key openai=<key>
 # Run as MCP server (install with MCP dependencies first)
 pip install "aider-chat[mcp]"
 aider --mcp-server --mcp-port 12000
+
+# Alternative installation if you have issues with SciPy (e.g., missing Fortran compiler)
+pip install "aider-chat" "fastapi>=0.104.0" "uvicorn>=0.24.0" "pydantic>=2.4.2"
+aider --mcp-server --mcp-port 12000
 ```
 
 See the [installation instructions](https://aider.chat/docs/install.html) and [usage documentation](https://aider.chat/docs/usage.html) for more details.

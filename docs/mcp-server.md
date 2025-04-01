@@ -16,6 +16,14 @@ pip install "aider-chat[mcp]"
 
 This will install the required dependencies for the MCP server, including FastAPI and Uvicorn.
 
+If you encounter issues with SciPy installation (such as missing Fortran compiler errors), you can install Aider without SciPy:
+
+```bash
+pip install "aider-chat" "fastapi>=0.104.0" "uvicorn>=0.24.0" "pydantic>=2.4.2"
+```
+
+Note that without SciPy, some features like repository visualization may not work, but the MCP server functionality will work fine.
+
 ## Running the MCP Server
 
 To run Aider as an MCP server, use the `--mcp-server` flag:
